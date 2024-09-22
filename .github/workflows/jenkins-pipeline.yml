@@ -1,0 +1,18 @@
+name: Run Jenkins Pipeline with Jenkinsfile Runner
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Jenkins Pipeline
+        uses: jenkinsci/jenkinsfile-runner@latest
+        env:
+          JENKINS_URL: "https://http://localhost:8080/"  # Replace with your Jenkins URL
+          JENKINS_CREDENTIALS: ${{ secrets.JENKINS_API_TOKEN }}  # Add a secret in your repo settings
+        with:
+          jenkinsfile: 'Jenkinsfile'  # Path to your Jenkinsfile
