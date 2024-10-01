@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run Jenkins Pipeline
-        uses: jenkinsci/jenkinsfile-runner@latest
+        uses: jenkinsci/jenkinsfile-runner@v0.5.0
         env:
           JENKINS_URL: "https://http://localhost:8080/"  # Replace with your Jenkins URL
           JENKINS_CREDENTIALS: ${{ secrets.JENKINS_API_TOKEN }}  # Add a secret in your repo settings
