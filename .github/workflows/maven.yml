@@ -21,13 +21,12 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package
-
+      - name: Start Jenkins Job
+        run: curl -X POST "http://localhost:8080/job/Insured_Assurance/build"
       - name: Trigger Jenkins Job
         env:
           JENKINS_URL: ${{ secrets.JENKINS_URL }}
           JENKINS_USER: ${{ secrets.JENKINS_USER }}
           JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
-        run: |
-          JENKINS_JOB_NAME="Insured_Assurance"  # Replace with your Jenkins job name
-          curl -X POST "$JENKINS_URL/job/$JENKINS_JOB_NAME/build" \
-            --user "$JENKINS_USER:$JENKINS_TOKEN"
+        run: JENKINS_JOB_NAME="Insured_Assurance"  # Replace with your Jenkins job name
+          curl -X POST "$JENKINS_URL/job/$JENKINS_JOB_NAME/build"--user "$JENKINS_USER:$JENKINS_TOKEN"
