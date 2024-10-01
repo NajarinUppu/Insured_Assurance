@@ -1,0 +1,38 @@
+name: CI/CD Pipeline for Java Application
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Specify your Java version
+          distribution: 'adopt'  # or 'temurin', 'zulu', etc.
+
+      - name: Build with Maven
+        run: mvn clean package  # Adjust if using Gradle
+
+      - name: Package the application
+        run: mvn package  # Ensure your WAR file is created in target/
+
+      - name: Trigger Jenkins Job
+        env:
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}  # Set in repo secrets
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}  # Set in repo secrets
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}  # Set in repo secrets
+          JOB_NAME: "Insured_Assurance"  # Replace with your job name
+        run: |
+          curl -X POST "${{ env.JENKINS_URL }}/job/${{ env.JOB_NAME }}/build" \
+          --user "${{ env.JENKINS_USER }}:${{ env.JENKINS_TOKEN }}" \
+          --silent --show-error
